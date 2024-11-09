@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sign Language Identifier</title>
+</head>
+<body>
+    <h1>Sign Language Identifier</h1>
+    <video id="video" width="640" height="480" autoplay></video>
+    <canvas id="canvas" width="640" height="480" style="display:none"></canvas>
+    <h2>Detected Sign: <span id="prediction">None</span></h2>
+
+    <script>
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const context = canvas.getContext('2d');
+        const predictionDisplay = document.getElementById('prediction');
+
+        async function startVideo() {
+            const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+            video.srcObject = stream;
+        }
+
+        function captureFrame() {
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            const frameData = canvas.toDataURL('image/jpeg').split(',')[1];  // Get base64 image data
+
+            fetch('/predict', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ frame: frameData })
+            })
+            .then(response => response.json())
+            .then(data => {
+                predictionDisplay.textContent = data.prediction || "No hand detected";
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
+        // Start capturing frames every second (adjust as needed)
+        setInterval(captureFrame, 1000);
+
+        // Start video on page load
+        startVideo();
+    </script>
+</body>
+</html>
