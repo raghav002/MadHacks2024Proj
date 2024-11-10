@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Language Quiz</title>
+    <style>
+        #quiz-info {
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+        #video {
+            margin-top: 20px;
+        }
+        #result {
+            font-size: 24px;
+            color: green;
+        }
+    </style>
+</head>
+<body>
+    <h1>Sign Language Quiz</h1>
+    <div id="quiz-info">
+        <p>How to sign this letter: {{ sign }}</p>
+        <p>Time remaining: <span id="timer">5</span> seconds</p>
+        <p id="result"></p>
+    </div>
+    <img id="video" src="{{ url_for('video_feed') }}" alt="Video Feed">
+    <script>
+        let timeRemaining = 5;
+        let timerInterval;
+        let timerRunning = true;  // Flag to check if the timer is running
+        let answerCorrect = false;
+        let answerAttempted = false;  // Flag to ensure incorrect message is shown only after 5 seconds
+
+        // Start the countdown timer
+        function startTimer() {
+            timerInterval = setInterval(function() {
+                if (timerRunning) {
+                    timeRemaining--;
+                    document.getElementById('timer').textContent = timeRemaining;
+                    if (timeRemaining <= 0 && !answerAttempted) {
+                        clearInterval(timerInterval);
+                        timerRunning = false;  // Stop the timer
+                        document.getElementById('result').textContent = 'Time is up!';
+                        setTimeout(function() {
+                            moveToNextSign();
+                        }, 3000);  // Wait 3 seconds before moving to the next sign
+                    }
+                }
+            }, 1000);
+        }
+
+        // Function to check prediction from backend
+        function checkPrediction() {
+            fetch('/check_prediction', { method: 'POST' })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === "correct" && !answerAttempted) {
+                        // If the answer is correct, stop the timer and show the result
+                        if (timerRunning) {
+                            clearInterval(timerInterval);  // Stop the timer immediately
+                            timerRunning = false;
+                            answerCorrect = true;  // User signed correctly
+                            answerAttempted = true;  // Set attempted flag to true
+                            document.getElementById('result').textContent = 'Correct! Moving to the next letter.';
+                            setTimeout(function() {
+                                moveToNextSign();  // Proceed to next question
+                            }, 3000);  // Wait 3 seconds before moving to the next question
+                        }
+                    } else if (data.status === "incorrect" && !answerAttempted) {
+                        // Show incorrect message only if the user hasn't signed correctly and timer ran out
+                        if (timeRemaining <= 0) {
+                            document.getElementById('result').textContent = 'Incorrect. Try again.';
+                            answerAttempted = true;  // Set attempted flag to true to stop further incorrect messages
+                        }
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        // Function to move to the next sign
+        function moveToNextSign() {
+            window.location.href = '/quiz';  // Reload or move to the next letter
+        }
+
+        // Start the timer when the page loads
+        startTimer();
+
+        // Check for the user's sign every second
+        setInterval(checkPrediction, 1000);
+    </script>
+</body>
+</html>
