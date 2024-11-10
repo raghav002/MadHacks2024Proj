@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Quiz</title>
+</head>
+<body>
+    <h1>Quiz</h1>
+    <p id="current-word"></p>
+    <p id="score">Score: 0</p>
+    <p id="feedback"></p>
+    <p id="timer">Time Left: 5 seconds</p>
+    <video id="video" autoplay></video>
+    <canvas id="canvas" style="border: 1px solid black;"></canvas>
+    <button id="start-quiz">Start Quiz</button>
+
+    <script>
+        const quizWords = {{ quiz_words|tojson }};
+        let currentIndex = 0;
+        let score = 0;
+        let isRunning = false;
+        let feedbackTimeout, questionTimeout, timerInterval, checkInterval;
+        let timeLeft = 5;
+
+        async function startVideo() {
+            const video = document.getElementById('video');
+            const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+            video.srcObject = stream;
+        }
+
+        function startQuiz() {
+            document.getElementById('start-quiz').disabled = true;
+            nextQuestion();
+        }
+
+        function nextQuestion() {
+            if (currentIndex >= quizWords.length) {
+                window.location.href = `/results/${score}/${quizWords.length}`;
+                return;
+            }
+
+            clearTimeout(feedbackTimeout);
+            clearTimeout(questionTimeout);
+            clearInterval(timerInterval);
+            clearInterval(checkInterval);
+
+            document.getElementById('feedback').textContent = "";
+            document.getElementById('current-word').textContent = "Sign: " + quizWords[currentIndex];
+            timeLeft = 5;
+            updateTimerDisplay();
+            startTimer();
+
+            isRunning = true;
+
+            questionTimeout = setTimeout(() => {
+                showFeedback(false);
+                currentIndex++;
+                nextQuestion();
+            }, 5000);
+
+            checkInterval = setInterval(captureFrameAndSend, 1000); // Call every second
+        }
+
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                updateTimerDisplay();
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            document.getElementById('timer').textContent = `Time Left: ${timeLeft} seconds`;
+        }
+
+        async function captureFrameAndSend() {
+            if (!isRunning) return;
+
+            const video = document.getElementById('video');
+            const canvas = document.getElementById('canvas');
+            const context = canvas.getContext('2d');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            canvas.toBlob(async (blob) => {
+                const formData = new FormData();
+                formData.append('video_frame', blob, 'frame.jpg');
+
+                const response = await fetch('/predict_gesture', { method: 'POST', body: formData });
+                const result = await response.json();
+
+                if (result.prediction) {
+                    // Draw bounding box and prediction label on the canvas
+                    context.clearRect(0, 0, canvas.width, canvas.height);
+                    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+                    context.strokeStyle = "red";
+                    context.lineWidth = 2;
+                    context.strokeRect(result.x1, result.y1, result.x2 - result.x1, result.y2 - result.y1);
+
+                    context.font = "20px Arial";
+                    context.fillStyle = "blue";
+                    context.fillText(result.prediction, result.x1, result.y1 - 10);
+                }
+
+                // Check if the prediction matches the current word
+                if (result.prediction === quizWords[currentIndex]) {
+                    isRunning = false;
+                    clearInterval(checkInterval);
+                    clearTimeout(questionTimeout);
+                    clearInterval(timerInterval);
+
+                    showFeedback(true);
+                    score++;
+                    currentIndex++;
+                    feedbackTimeout = setTimeout(nextQuestion, 3000); // Show feedback for 3 seconds
+                }
+            }, 'image/jpeg');
+        }
+
+        function showFeedback(isCorrect) {
+            document.getElementById('feedback').textContent = isCorrect ? "Correct!" : "Incorrect!";
+            document.getElementById('score').textContent = `Score: ${score}`;
+        }
+
+        document.getElementById('start-quiz').addEventListener('click', startQuiz);
+        window.onload = startVideo;
+    </script>
+</body>
+</html>
