@@ -85,6 +85,7 @@ def gen_frames():
                 predicted_character = labels_dict[int(prediction[0])]
 
                 # Check if the user signed correctly and hold for 1 second
+                print(current_sign_index)
                 if predicted_character == signs[current_sign_index]:
                     if not sign_start_time:
                         sign_start_time = time.time()  # Start the timer
@@ -123,7 +124,8 @@ def check_prediction():
         
         # Check if we have reached the end of the quiz
         if current_sign_index >= len(signs):
-            return jsonify({"status": "completed", "message": "You have completed the quiz!"})
+            # If quiz is completed, redirect to practice menu
+            return jsonify({"status": "completed", "message": "You have completed the quiz!", "redirect": "/practice"})
         else:
             return jsonify({"status": "correct", "sign": signs[current_sign_index]})
 

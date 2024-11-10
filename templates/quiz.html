@@ -53,31 +53,34 @@
 
         // Function to check prediction from backend
         function checkPrediction() {
-            fetch('/check_prediction', { method: 'POST' })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.status === "correct" && !answerAttempted) {
-                        // If the answer is correct, stop the timer and show the result
-                        if (timerRunning) {
-                            clearInterval(timerInterval);  // Stop the timer immediately
-                            timerRunning = false;
-                            answerCorrect = true;  // User signed correctly
-                            answerAttempted = true;  // Set attempted flag to true
-                            document.getElementById('result').textContent = 'Correct! Moving to the next letter.';
-                            setTimeout(function() {
-                                moveToNextSign();  // Proceed to next question
-                            }, 3000);  // Wait 3 seconds before moving to the next question
-                        }
-                    } else if (data.status === "incorrect" && !answerAttempted) {
-                        // Show incorrect message only if the user hasn't signed correctly and timer ran out
-                        if (timeRemaining <= 0) {
-                            document.getElementById('result').textContent = 'Incorrect. Try again.';
-                            answerAttempted = true;  // Set attempted flag to true to stop further incorrect messages
-                        }
-                    }
-                })
-                .catch(error => console.error('Error:', error));
-        }
+    fetch('/check_prediction', { method: 'POST' })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === "correct" && !answerAttempted) {
+                // If the answer is correct, stop the timer and show the result
+                if (timerRunning) {
+                    clearInterval(timerInterval);  // Stop the timer immediately
+                    timerRunning = false;
+                    answerCorrect = true;  // User signed correctly
+                    answerAttempted = true;  // Set attempted flag to true
+                    document.getElementById('result').textContent = 'Correct! Moving to the next letter.';
+                    setTimeout(function() {
+                        moveToNextSign();  // Proceed to next question
+                    }, 3000);  // Wait 3 seconds before moving to the next question
+                }
+            } else if (data.status === "incorrect" && !answerAttempted) {
+                // Show incorrect message only if the user hasn't signed correctly and timer ran out
+                if (timeRemaining <= 0) {
+                    document.getElementById('result').textContent = 'Incorrect. Try again.';
+                    answerAttempted = true;  // Set attempted flag to true to stop further incorrect messages
+                }
+            } else if (data.redirect) {
+                // Redirect to practice menu if quiz is completed
+                window.location.href = data.redirect;
+            }
+        })
+        .catch(error => console.error('Error:', error));
+}
 
         // Function to move to the next sign
         function moveToNextSign() {
