@@ -238,12 +238,12 @@
                 // Check if the prediction matches the current word
                 if (result.prediction === quizWords[currentIndex]) {
                     isRunning = false;
+                    score++;
                     clearInterval(checkInterval);
                     clearTimeout(questionTimeout);
                     clearInterval(timerInterval);
 
                     showFeedback(true);
-                    score++;
                     currentIndex++;
                     feedbackTimeout = setTimeout(nextQuestion, 3000); // Show feedback for 3 seconds
                 }
