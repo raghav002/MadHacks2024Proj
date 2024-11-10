@@ -2,10 +2,75 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Main Menu</title>
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f4;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+            font-weight: bold;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+        }
+
+        a {
+            background-color: #8e44ad;
+            color: white;
+            font-size: 1.1rem;
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 30px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        a:hover {
+            background-color: #9b59b6;
+            transform: translateY(-3px);
+        }
+
+        a:active {
+            transform: translateY(0);
+        }
+
+        a:focus {
+            outline: none;
+        }
+
+        /* Adding a soft gradient background */
+        body {
+            background: linear-gradient(135deg, #8e44ad, #9b59b6);
+            color: #fff;
+        }
+    </style>
 </head>
 <body>
     <h1>Main Menu</h1>
-    <a href="/practicemenu">Go to Practice Menu</a>
+    <div class="button-container">
+        <a href="/practicemenu">Go to Practice Menu</a>
+    </div>
 </body>
 </html>
