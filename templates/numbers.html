@@ -2,10 +2,101 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Numbers in Sign</title>
+    <title>Numbers in Sign Language</title>
+    <style>
+        /* General page styling */
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #e6f0fa;
+            color: #34495e;
+        }
+
+        /* Header styling */
+        h1 {
+            font-size: 2.5em;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        /* Image styling */
+        .sign-image {
+            max-width: 80%;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s;
+        }
+
+        /* Hover effect on image */
+        .sign-image:hover {
+            transform: scale(1.05);
+        }
+
+        /* Button Container */
+        .button-container {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        /* Button Styling */
+        .btn {
+            padding: 12px 24px;
+            font-size: 1.2em;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            width: 150px;
+            text-align: center;
+        }
+
+        /* Main Menu button color */
+        .btn-main {
+            background-color: #007bff; /* Vibrant blue */
+            color: white;
+        }
+
+        .btn-main:hover {
+            background-color: #0056b3; /* Darker blue on hover */
+            transform: translateY(-2px);
+        }
+
+        /* Practice Menu button color */
+        .btn-practice {
+            background-color: #28a745; /* Soft green */
+            color: white;
+        }
+
+        .btn-practice:hover {
+            background-color: #218838; /* Darker green on hover */
+            transform: translateY(-2px);
+        }
+
+    </style>
 </head>
 <body>
-    <h1>Numbers in Sign</h1>
-    <img src="https://signstation.org/wp-content/uploads/2021/09/How-to-Count-in-Sign-Language.jpg">
+    <h1>Numbers in Sign Language</h1>
+    <img src="https://signstation.org/wp-content/uploads/2021/09/How-to-Count-in-Sign-Language.jpg" 
+         alt="How to count in sign language" 
+         class="sign-image">
+
+    <!-- Button Container -->
+    <div class="button-container">
+        <a href="/">
+            <button class="btn btn-main">Main Menu</button>
+        </a>
+        <a href="/practicemenu">
+            <button class="btn btn-practice">Practice</button>
+        </a>
+    </div>
 </body>
 </html>
