@@ -53,8 +53,11 @@
 
         // Function to check prediction from backend
         function checkPrediction() {
+        // Fetch the prediction from the backend
     fetch('/check_prediction', { method: 'POST' })
+    // Parse the JSON response
         .then(response => response.json())
+        // Check if the answer is correct or incorrect
         .then(data => {
             if (data.status === "correct" && !answerAttempted) {
                 // If the answer is correct, stop the timer and show the result
@@ -76,12 +79,11 @@
                 }
             } else if (data.redirect) {
                 // Redirect to practice menu if quiz is completed
-                window.location.href = data.redirect;
+                window.location.href = '/result'; 
             }
         })
         .catch(error => console.error('Error:', error));
 }
-
         // Function to move to the next sign
         function moveToNextSign() {
             window.location.href = '/quiz';  // Reload or move to the next letter

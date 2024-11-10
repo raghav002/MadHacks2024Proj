@@ -82,7 +82,7 @@ def gen_frames():
         if results.multi_hand_landmarks:
             # CHANGE THIS -> PARTIALLY CAUSING CRASHES ALMOST FOR CERTAIN 
             # Process only the first hand (if only single hand is needed) 
-            for hand_landmarks in results.multi_hand_landmarks[:1]:
+            for hand_landmarks in results.multi_hand_landmarks:
                 x_ = []
                 y_ = []
                 # Store data for each landmark
@@ -104,7 +104,7 @@ def gen_frames():
                 predicted_character = labels_dict[int(prediction[0])]
 
                 # Check if the user signed correctly and hold for 1 second
-                print(current_sign_index)
+                # print(current_sign_index)
                 if predicted_character == signs[current_sign_index]:
                     # If the timer hasn't started, start it
                     if not sign_start_time:
@@ -153,6 +153,10 @@ def video_feed():
     # of the multiplart message -> Used to delineate diff parts/frames of the stream 
     return Response(gen_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
+@app.route('/result')
+def result():
+    return render_template('result.html')
+
 # Quiz-related routes
 @app.route('/check_prediction', methods=['POST'])
 def check_prediction():
@@ -172,6 +176,7 @@ def check_prediction():
             # JSON is a lightweight data interchange format that is easy for humans to read
             # jsonify also sets appropriate content type for HTTP response
             # Dict used here indicates operation status, message, and redirect URL
+            current_sign_index = 0
             return jsonify({"status": "completed", "message": "You have completed the quiz!", "redirect": "/practice"})
         else:
             return jsonify({"status": "correct", "sign": signs[current_sign_index]})
