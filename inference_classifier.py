@@ -44,7 +44,7 @@ while True:
         # Process only the first hand (if only single hand is needed)
         # If two hands -> results.multi_hand_landmarks[:2]
         # If no limit -> results.multi_hand_landmarks
-        for hand_landmarks in results.multi_hand_landmarks[:1]:  
+        for hand_landmarks in results.multi_hand_landmarks:  
             x_ = []
             y_ = []
 

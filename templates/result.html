@@ -4,9 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Results Page</title>
+    <script>
+        window.onload = function() {
+            var score = localStorage.getItem('userScore');
+            var output = document.getElementById("output");
+        };
+    </script>
 </head>
 <body>
-    <h1>Welcome to the Results Page</h1>
-    <button onclick="window.location.href='/practice_menu'">Go to Practice</button>
+    <h1>Welcome to the Results Page</h1> 
+    <p>Your score is: </p>
+    <br>
+    <p id="output"></p>
+    <br>
+    <button onclick="window.location.href='/practice'">Go to Practice</button>
 </body>
 </html>

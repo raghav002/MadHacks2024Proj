@@ -32,7 +32,7 @@
         let timerRunning = true;  // Flag to check if the timer is running
         let answerCorrect = false;
         let answerAttempted = false;  // Flag to ensure incorrect message is shown only after 5 seconds
-
+        var score = 0;
         // Start the countdown timer
         function startTimer() {
             timerInterval = setInterval(function() {
@@ -67,18 +67,20 @@
                     answerCorrect = true;  // User signed correctly
                     answerAttempted = true;  // Set attempted flag to true
                     document.getElementById('result').textContent = 'Correct! Moving to the next letter.';
+                    score=score+1;
                     setTimeout(function() {
                         moveToNextSign();  // Proceed to next question
                     }, 3000);  // Wait 3 seconds before moving to the next question
                 }
             } else if (data.status === "incorrect" && !answerAttempted) {
                 // Show incorrect message only if the user hasn't signed correctly and timer ran out
-                if (timeRemaining <= 0) {
+                if (timeRemaining <= 0) { 
                     document.getElementById('result').textContent = 'Incorrect. Try again.';
                     answerAttempted = true;  // Set attempted flag to true to stop further incorrect messages
                 }
             } else if (data.redirect) {
                 // Redirect to practice menu if quiz is completed
+                localStorage.setItem('userScore', score);
                 window.location.href = '/result'; 
             }
         })
