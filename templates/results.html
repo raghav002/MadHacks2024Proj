@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Results</title>
+    <style>
+        /* General page styling */
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f7f7f7;
+            color: #333;
+        }
+
+        /* Header styling */
+        h1 {
+            font-size: 3em;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        /* Result styling */
+        p {
+            font-size: 1.5em;
+            color: #34495e;
+            margin-bottom: 40px;
+        }
+
+        /* Button styling */
+        a {
+            text-decoration: none;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            font-size: 1.2em;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            width: 150px;
+            text-align: center;
+        }
+
+        /* Main Menu button color */
+        .btn-main {
+            background-color: #007bff; /* Vibrant blue */
+            color: white;
+        }
+
+        .btn-main:hover {
+            background-color: #0056b3; /* Darker blue on hover */
+            transform: translateY(-2px);
+        }
+
+        /* Back to Practice button color */
+        .btn-back {
+            background-color: #28a745; /* Soft green */
+            color: white;
+        }
+
+        .btn-back:hover {
+            background-color: #218838; /* Darker green on hover */
+            transform: translateY(-2px);
+        }
+
+        /* Center alignment of content */
+        .container {
+            text-align: center;
+        }
+
+        /* Button Container for Main Menu and Back to Practice */
+        .button-container {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Quiz Results</h1>
+        <p>Your score: {{ score }} / {{ total }}</p>
+        
+        <!-- Button Container for Main Menu and Back to Practice -->
+        <div class="button-container">
+            <a href="/">
+                <button class="btn btn-main">Main Menu</button>
+            </a>
+            <a href="/practicemenu">
+                <button class="btn btn-back">Practice</button>
+            </a>
+        </div>
+    </div>
+</body>
+</html>

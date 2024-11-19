@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Practice Menu</title>
+    <style>
+        /* Reset default margins */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Background styling */
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(to right, #3a7bd5, #00d2ff); /* Soft blue gradient */
+            font-family: Arial, sans-serif;
+            color: #fff;
+        }
+
+        /* Container for menu */
+        .menu-container {
+            text-align: center;
+            background-color: rgba(255, 255, 255, 0.15); /* Soft overlay */
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Title styling */
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: #e0f7fa; /* Light blue for title */
+        }
+
+        /* Link button styling */
+        a {
+            display: block;
+            text-decoration: none;
+            color: #fff;
+            background: #66bb6a; /* Calming green button */
+            padding: 0.75rem 1.5rem;
+            margin: 0.5rem auto;
+            border-radius: 5px;
+            width: 60%;
+            transition: background 0.3s ease;
+            font-size: 1.2rem;
+        }
+
+        /* Hover effect */
+        a:hover {
+            background: #81c784; /* Lighter green on hover */
+        }
+
+        /* Button Container */
+        .button-container {
+            display: flex;
+            gap: 20px;
+            margin-top: 30px;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            font-size: 1.2em;
+            background-color: #2980b9;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .btn:hover {
+            background-color: #3498db;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="menu-container">
+        <h1>Practice Menu</h1>
+        <a href="/quizpage">All Entries</a>
+        <a href="/quizpage2">Letters Only</a>
+        <a href="/quizpage3">Numbers Only</a>
+        <a href="/quizpage4">Words Only</a>
+        <a href="/quizpage5">Hybrid Practice</a>
+
+        <!-- Button Container -->
+        <div class="button-container">
+            <a href="/">
+                <button class="btn">Go to Main menu</button>
+            </a>
+        </div>
+    </div>
+</body>
+</html>
