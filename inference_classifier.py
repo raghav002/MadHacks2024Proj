@@ -46,7 +46,7 @@ while True:
         # Process only the first hand (if only single hand is needed)
         # If two hands -> results.multi_hand_landmarks[:2]
         # If no limit -> results.multi_hand_landmarks
-        for hand_landmarks in results.multi_hand_landmarks:  
+        for hand_landmarks in results.multi_hand_landmarks[:2]:  
             x_ = []
             y_ = []
 
@@ -76,12 +76,10 @@ while True:
             # on the input data (in this case, the normalized hand landmarks)
             # Prediction is the output of the model -> the predicted class/letter
             prediction = model.predict([np.asarray(data_aux)])
-            # labels_dict is a dict that maps class indices to their corresponding labels/chars
-            # the stuff in brackets extracts the predicted class index from the prediction array
-            # The whole thing retrieves the corresponding character/letter for the predicted class
+            # labels_dict = maps class outcomes to their corresponding characters
+            # Code in brackets extracts the predicted class index from the prediction array
+            # The whole line retrieves the corresponding character for the predicted class
             # and stores it in the variable predicted_character
-            # The variable itself is the char or label that the model predicts based on the 
-            # input data
             predicted_character = labels_dict[int(prediction[0])]
 
             # Display bounding box and predicted character to show what the model things you're
