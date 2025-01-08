@@ -1,7 +1,9 @@
+# To be run after running motiondata.py
+
 import cv2
 import numpy as np
 from config import DATA_PATH, DATA_PATH2, ACTIONS
-from utils import mediapipe_detection, draw_styled_landmarks, mp_holistic, extract_keypoints
+from motionutils import mediapipe_detection, draw_styled_landmarks, mp_holistic, extract_keypoints
 import os
 
 def collect_data():
@@ -10,8 +12,6 @@ def collect_data():
             seq_path = os.path.join(DATA_PATH, file)
             for seq in os.listdir(seq_path):
 
-            
-                #print(name[0])
                 # Define the directory where frames are stored for this action and sequence
                 frame_dir = os.path.join(DATA_PATH, file, seq)
 

@@ -13,7 +13,7 @@ from tensorflow.keras.models import load_model
 import streamlit as st
 import time
 import cv2
-from utils import mediapipe_detection, draw_styled_landmarks, prob_viz, extract_keypoints, mp_holistic
+from motionutils import mediapipe_detection, draw_styled_landmarks, prob_viz, extract_keypoints, mp_holistic
 from config import THRESHOLD, sentence
 import numpy as np
 import matplotlib.pyplot as plt
@@ -78,20 +78,31 @@ def main():
             keypoints = extract_keypoints(results)
             sequence.append(keypoints)
             sequence = sequence[-30:]
-        
+            predicted_action = "" 
             if len(sequence) == 30:
                 res = model.predict(np.expand_dims(sequence, axis=0))[0]
+                action_index = np.argmax(res)
+                predicted_action = ACTIONS[action_index]  # Get the action label
+                predictions.append(action_index)
+                #res = model.predict(np.expand_dims(sequence, axis=0))[0]
                 print(ACTIONS[np.argmax(res)])
-                predictions.append(np.argmax(res))
+                #predictions.append(np.argmax(res))
 
-        #3. Viz logic
-                if np.unique(predictions[-10:])[0]==np.argmax(res): 
-                    if res[np.argmax(res)] > threshold: 
-                        if len(sentence) > 0: 
-                            if ACTIONS[np.argmax(res)] != sentence[-1]:
-                                sentence.append(ACTIONS[np.argmax(res)])
-                        else:
-                            sentence.append(ACTIONS[np.argmax(res)])
+                #3. Viz logic
+                if np.unique(predictions[-10:])[0] == action_index:
+                            if res[action_index] > threshold:
+                                if len(sentence) > 0:
+                                    if predicted_action != sentence[-1]:
+                                        sentence.append(predicted_action)
+                                else:
+                                    sentence.append(predicted_action)
+                #if np.unique(predictions[-10:])[0]==np.argmax(res): 
+                 #   if res[np.argmax(res)] > threshold: 
+                  #      if len(sentence) > 0: 
+                   #         if ACTIONS[np.argmax(res)] != sentence[-1]:
+                    #            sentence.append(ACTIONS[np.argmax(res)])
+                     #   else:
+                      #      sentence.append(ACTIONS[np.argmax(res)])
 
 
                 # if len(sentence) > 5: 
@@ -102,6 +113,15 @@ def main():
             #cv2.putText(image, ' '.join(sentence), (3, 30), 
              #           cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
         
+            # Display the predicted action on the frame
+            cv2.rectangle(image, (0, 0), (640, 40), (245, 117, 16), -1)  # Background rectangle
+            cv2.putText(
+                image, f"Action: {predicted_action}", (10, 30),  # Display action text
+                cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA
+            )
+
+            cv2.imshow('Action Recognition', image)
+
             # Show the frame in Streamlit
             FRAME_WINDOW.image(image, channels="BGR")  # Display the processed frame
 
@@ -111,6 +131,8 @@ def main():
 
         cap.release()
         cv2.destroyAllWindows()
+
+main()
 
 
 

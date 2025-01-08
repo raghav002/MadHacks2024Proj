@@ -1,3 +1,5 @@
+# To be run after creating the data 
+
 import numpy as np
 import os
 from config import DATA_PATH, ACTIONS

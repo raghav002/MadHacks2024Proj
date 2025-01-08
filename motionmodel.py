@@ -1,15 +1,18 @@
+# Create the actual model - must be run AFTER motiondatacollection and preprocessing
+
+from motiondatacollection import collect_data
+from motionpreprocessing import preprocess_data
+
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import LSTM, Dense, Dropout, Flatten
 from tensorflow.keras.callbacks import TensorBoard
 from tensorflow.keras.utils import to_categorical
-from data_collection import collect_data
-from preprocessing import preprocess_data
 import os
 from tensorflow.keras.applications import ResNet50
 from tensorflow.keras.models import Model, Sequential
 from tensorflow.keras.layers import LSTM, Dense, Dropout, TimeDistributed, Flatten
 from tensorflow.keras.layers import GlobalAveragePooling2D
-import json
+
 from config import ACTIONS
 import numpy as np
 from sklearn.model_selection import train_test_split
@@ -24,7 +27,6 @@ def create_model():
     model.add(Dense(128, activation='relu'))
     model.add(Flatten())
     model.add(Dense(len(ACTIONS), activation='softmax'))
-
     return model
 
 
@@ -38,15 +40,7 @@ def train_model(X_train, y_train):
     model.fit(X_train, y_train, epochs=1000, callbacks=[tb_callback])
     return model
 
-def collect_and_train():
-    # with open('final_train.json', 'r') as data_file:
-    #     json_data = data_file.read()
-
-    # instance_json = json.loads(json_data)
-    # actions = list(instance_json.keys())
-    #Data Collection
-    # collect_data()   
-    # Data Preprocessing
+def collect_and_train(): 
     X, y = preprocess_data()   
     y = to_categorical(y, num_classes=len(ACTIONS))
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.05)

@@ -1,3 +1,5 @@
+#This file creates the data for the motion-enabled model to capture - FIRST FILE TO RUN 
+
 import cv2
 import numpy as np
 import os
@@ -8,23 +10,24 @@ import shutil
 
 class CreateData():
     def __init__(self):
-        self.mp_holistic = mp.solutions.holistic # Holistic model
-        self.mp_drawing = mp.solutions.drawing_utils # Drawing utilities
+        # Holisitc model -> Includes multiple detection models (Pose, Face, Hands, Face Mesh)
+        self.mp_holistic = mp.solutions.holistic 
+        self.mp_drawing = mp.solutions.drawing_utils 
         self.mp_face_mesh = mp.solutions.face_mesh
-        # Thirty videos worth of data
-        self.no_sequences = 15
+        # Fifteen videos worth of data for each action/sign 
+        self.no_sequences = 15 
         
         # Videos are going to be 30 frames in length
         self.sequence_length = 30
         
-        # Folder start
+        # Folder start (name of the folder that will have the videos recorded)
         self.start_folder = 1
 
-        self.DATA_PATH = os.path.join('MP_Data')
+        self.DATA_PATH = os.path.join('MP_Data') # Path to store the data
         # Actions that we try to detect
-        self.actions = np.array(["i","name","help", "drink water", "cold", "today", "please", "thankyou", "sorry", "IloveU"])
+        self.actions = np.array(["hello","see you later","i", "father", "mother"])
 
-    def mediapipe_detection(self,image, model):
+    def mediapipe_detection(self,image, model): # Function to detect the landmarks
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB) # COLOR CONVERSION BGR 2 RGB
         image.flags.writeable = False                  # Image is no longer writeable
         results = model.process(image)                 # Make prediction
@@ -33,7 +36,7 @@ class CreateData():
         return image, results
 
     def draw_styled_landmarks(self, image, results):
-    # Draw face connections
+        # Draw face connections
         self.mp_drawing.draw_landmarks(image, results.face_landmarks, self.mp_face_mesh.FACEMESH_CONTOURS, 
                                  self.mp_drawing.DrawingSpec(color=(80,110,10), thickness=1, circle_radius=1), 
                                  self.mp_drawing.DrawingSpec(color=(80,256,121), thickness=1, circle_radius=1)
@@ -116,7 +119,7 @@ class CreateData():
                         np.save(npy_path, keypoints)
         
                         # Break gracefully
-                        if cv2.waitKey(10) & 0xFF == ord('q'):
+                        if cv2.waitKey(25) & 0xFF == ord('q'):
                             break
                             
             cap.release()
