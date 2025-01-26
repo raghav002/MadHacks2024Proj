@@ -2,8 +2,7 @@ import cv2
 import mediapipe as mp
 import numpy as np
 import collections
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import LSTM, Dense
+from tensorflow import Sequential, LSTM, Dense
 
 # Initialize MediaPipe Hands
 mp_hands = mp.solutions.hands

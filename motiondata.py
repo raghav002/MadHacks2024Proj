@@ -1,13 +1,9 @@
-
 # First file to run (when creating/retraining the model) - creates the data for the model to capture
 
 import cv2
 import numpy as np
-import os
-import time
-import mediapipe as mp
-import shutil
-
+import os 
+import mediapipe as mp 
 
 class CreateData():
     def __init__(self):
