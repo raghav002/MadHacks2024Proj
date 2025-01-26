@@ -3,21 +3,11 @@
 
 from motiondatacollection import collect_data
 from motionpreprocessing import preprocess_data
-
-from tensorflow import Sequential
-from tensorflow import LSTM, Dense, Dropout, Flatten
-from tensorflow import TensorBoard
-from tensorflow import to_categorical
-import os
-from tensorflow import ResNet50
-from tensorflow import Model, Sequential
-from tensorflow import LSTM, Dense, Dropout, TimeDistributed, Flatten
-from tensorflow import GlobalAveragePooling2D
-
+from tensorflow import Sequential, Dense, Dropout, Flatten, TensorBoard, to_categorical
+import os    
 from config import ACTIONS
 import numpy as np
-from sklearn.model_selection import train_test_split
-from tensorflow import load_model
+from sklearn.model_selection import train_test_split 
 
 def create_model():
     model = Sequential()
