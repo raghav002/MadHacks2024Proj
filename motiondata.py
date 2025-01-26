@@ -1,4 +1,5 @@
-#This file creates the data for the motion-enabled model to capture - FIRST FILE TO RUN 
+
+# First file to run (when creating/retraining the model) - creates the data for the model to capture
 
 import cv2
 import numpy as np
